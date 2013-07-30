@@ -8,38 +8,22 @@ function [topList,newTEC] = topListToData(startTime,endTime, ...
 %timeinterval, they are removed from the toplist and added at the
 %correct time among the other data in the TEC-matrix.
 
-global GLOBAL__AL
-
 length_TEC = size(TEC,1)-2;
 
 %Make a list of toplist elements within considered time interval
-onInterval = [];
+[~,indOk] = irf_tlim(topList,startTime,endTime);
 
-for i=1:GLOBAL__AL.nTopEventsToRecord
-	if topList(i,1) >= startTime && topList(i,1) <= endTime
-		onInterval = [onInterval ; topList(i,:)];
-	end
-end
-
-length_on = size(onInterval,1);
+nTopListOk = numel(indOk);
 
 %If there are toplist elements in interval, they are sorted in the
 %correct time order with earliest time first
-if length_on > 0
+if nTopListOk > 0
+	
+	[~,inSort]=sort(topList(indOk,1));
+	indOkSorted = indOk(inSort);
 	
 	
-	for j=1:length_on
-		for k=j:length_on
-			if onInterval(k,1) <= onInterval(j,1)
-				temp = onInterval(j,:);
-				onInterval(j,:) = onInterval(k,:);
-				onInterval(k,:) = temp;
-			end
-		end
-	end
-	
-	
-	%Create a new TEC-matrix and then walk throuh the old TEC matric and the
+	%Create a new TEC-matrix and then walk through the old TEC matric and the
 	%relevant toplist elements adding them in the correct time order.
 	newTEC =  TEC(1:2,:);
 	
@@ -47,28 +31,28 @@ if length_on > 0
 	i_TEC = 3;
 	i_start = 3;
 	
-	while i_TEC < length_TEC && i_on <= length_on
+	while i_TEC < length_TEC && i_on <= nTopListOk
 		
-		if  onInterval(i_on,1) > TEC(i_TEC+1,1)
+		if  topList(indOkSorted(i_on),1) > TEC(i_TEC+1,1)
 			
 			i_TEC = i_TEC + 1;
 			
-		elseif onInterval(i_on,1) >= TEC(i_TEC,1) && ...
-				onInterval(i_on,1) <= TEC(i_TEC+1,1)
+		elseif topList(indOkSorted(i_on),1) >= TEC(i_TEC,1) && ...
+				topList(indOkSorted(i_on),1) <= TEC(i_TEC+1,1)
 			
 			if i_TEC >= i_start
 				newTEC = [newTEC ; TEC(i_start:i_TEC,:) ...
-					; onInterval(i_on,:)];
+					; topList(indOkSorted(i_on),:)];
 				i_start = i_TEC + 1;
 				i_on = i_on + 1;
 			else
-				newTEC = [newTEC ; onInterval(i_on,:)];
+				newTEC = [newTEC ; topList(indOkSorted(i_on),:)];
 				i_on = i_on + 1;
 			end
 			
-		elseif i_TEC == 3 && onInterval(i_on,1) < TEC(i_TEC,1)
+		elseif i_TEC == 3 && topList(indOkSorted(i_on),1) < TEC(i_TEC,1)
 			
-			newTEC = [newTEC ; onInterval(i_on,:)];
+			newTEC = [newTEC ; topList(indOkSorted(i_on),:)];
 			i_on = i_on + 1;
 		end
 		
@@ -76,7 +60,7 @@ if length_on > 0
 	
 	
 	if i_TEC >= length_TEC
-		newTEC = [newTEC ; TEC(i_start:length_TEC,:) ; onInterval(i_on:length_on,:)];
+		newTEC = [newTEC ; TEC(i_start:length_TEC,:) ; topList(indOkSorted(i_on:nTopListOk),:)];
 	else
 		newTEC = [newTEC ; TEC(i_start:length_TEC,:)];
 	end
@@ -85,10 +69,7 @@ if length_on > 0
 	
 	
 	%Remove the relevant toplist elements from the toplist
-	for m=1:length_on
-		topList = AL.removeFromTopList(topList,onInterval(m,:));
-	end
-	
+	topList(indOk) = [];
 	
 	
 else
