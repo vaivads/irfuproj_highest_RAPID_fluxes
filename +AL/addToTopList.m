@@ -18,27 +18,29 @@ function topList = addToTopList(newElement,topList)
 %        added, the smallest element is dropped from the list.
 
 closestTimeInterval = 8*60; % two points cannot be closer than 8 min
+doTopList = true;           % insert new element into the top list
 
 topListLength = size(topList,1);
 
+% top list events within closestTimeInterval
 indClose = find(abs(topList(:,1)-newElement(1)) < closestTimeInterval);
-if any(indClose) % there is topList element within closest time interval allowed
-disp('Old toplist:');
-for j=1:topListLength,
-	disp([num2str(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
-end
-disp(['added element: ' irf_time(newElement(1),'iso') ' ' num2str(newElement(2)) ' C' num2str(newElement(3))]);
 
+% if there are such events, check if they need to be replaced
+if any(indClose) 
 	if numel(indClose) == 2, % new element inbetween two elements
 		if newElement(2) > topList(indClose(1),2) && ...
 				newElement(2) > topList(indClose(2),2) % replace 2 events with one
 			topList(indClose,:)=[]; % remove 2 events, will be replaced by new one
 			topList(end:end+2,:)=0;
+		else
+			doTopList = false; % do not insert the new element as there is nearby better event
 		end
 	elseif numel(indClose) == 1,
 		if newElement(2) > topList(indClose,2) % if higher flux replace with the new one
 			topList(indClose,:)=[]; % remove old element, will be replaced by new one in the next loop
 			topList(end+1,:) = 0;
+		else
+			doTopList = false; % do not insert the new element as there is nearby better event
 		end
 	end
 	
@@ -46,15 +48,11 @@ disp(['added element: ' irf_time(newElement(1),'iso') ' ' num2str(newElement(2))
 	[~,ind] = sort(topList(:,2),1,'descend');
 	topList = topList(ind,:);
 	
-disp('New toplist:');
-for j=1:topListLength,
-	disp([num2str(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
-end
 end
 
 
-doTopList = true;
-iTop     = 1;
+% insert newElement into the toplist 
+iTop = 1;
 while doTopList
 	if newElement(2) > topList(iTop,2)
 		doTopList = false;
