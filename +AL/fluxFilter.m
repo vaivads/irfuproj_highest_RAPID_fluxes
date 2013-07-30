@@ -112,7 +112,7 @@ while index <= electronIndexEnd
 				iTop =iPre - 1 + localTopIndex;
 				
 				%If it qualifies for toplist, add it to list.
-				if TEC(iTop,2) > topList(1,2)
+				if TEC(iTop,2) > topList(end,2)
 					topList = AL.addToTopList(TEC(iTop,:),topList);
 				end
 				

@@ -21,12 +21,12 @@ function topList = addToTopList(newElement,topList)
 
 topListLength = size(topList,1);
 
-endOfTop = false;
+doTopList = true;
 iTop     = 1;
 
-while endOfTop
+while doTopList
 	if newElement(2) > topList(iTop)
-		endOfTop = true;
+		doTopList = flase;
 		topList = [topList(1:iTop-1);...
 			newElement(2);...
 			topList(iTop:topListLength-1)];
@@ -34,7 +34,7 @@ while endOfTop
 		pos=pos+1;
 	end
 	if pos > topListLength
-		endOfTop = true;
+		doTopList = false;
 	end
 end
 
