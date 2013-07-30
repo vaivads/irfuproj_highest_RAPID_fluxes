@@ -26,7 +26,7 @@ iTop     = 1;
 
 while doTopList
 	if newElement(2) > topList(iTop)
-		doTopList = flase;
+		doTopList = false;
 		topList = [topList(1:iTop-1);...
 			newElement(2);...
 			topList(iTop:topListLength-1)];
