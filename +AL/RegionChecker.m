@@ -20,6 +20,7 @@ function timeList = RegionChecker(startTime,endTime,craft)
     R = local.c_read(['R' num2str(craft)],tint,'mat');
     
     if isempty(R) == 0
+	  TX=R;
     
         %Number of time point with position data. If more than one point is
         %available, we can check the intervals.
