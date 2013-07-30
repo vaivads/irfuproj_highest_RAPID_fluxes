@@ -27,10 +27,12 @@ if indClose % there is topList element withiin closest time interval allowed
 		if newElement(2) > topList(indClose(1),2) && ...
 				newElement(2) > topList(indClose(2),2) % replace 2 events with one
 			topList(indClose,:)=[]; % remove 2 events, will be replaced by new one
+			topList(end:end+2,:)=0;
 		end
 	elseif numel(indClose) == 1,
 		if newElement(2) > topList(indClose,2) % if higher flux replace with the new one
 			topList(indClose,:)=[]; % remove old element, will be replaced by new one in the next loop
+			topList(end+1,:) = 0;
 		end
 	end
 	
