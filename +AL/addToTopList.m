@@ -22,7 +22,7 @@ closestTimeInterval = 8*60; % two points cannot be closer than 8 min
 topListLength = size(topList,1);
 
 indClose = find(abs(topList(:,1)-newElement(1)) < closestTimeInterval);
-if indClose % there is topList element withiin closest time interval allowed
+if any(indClose) % there is topList element within closest time interval allowed
 	if numel(indClose) == 2, % new element inbetween two elements
 		if newElement(2) > topList(indClose(1),2) && ...
 				newElement(2) > topList(indClose(2),2) % replace 2 events with one
@@ -57,6 +57,11 @@ while doTopList
 	if iTop > topListLength
 		doTopList = false;
 	end
+end
+
+for j=1:topListLength,
+	disp('New toplist:');
+	disp([numstr(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
 end
 
 
