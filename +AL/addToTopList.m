@@ -23,6 +23,12 @@ topListLength = size(topList,1);
 
 indClose = find(abs(topList(:,1)-newElement(1)) < closestTimeInterval);
 if any(indClose) % there is topList element within closest time interval allowed
+disp('Old toplist:');
+for j=1:topListLength,
+	disp([num2str(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
+end
+disp(['added element: ' irf_time(newElement(1),'iso') ' ' num2str(newElement(2)) ' C' num2str(newElement(3))]);
+
 	if numel(indClose) == 2, % new element inbetween two elements
 		if newElement(2) > topList(indClose(1),2) && ...
 				newElement(2) > topList(indClose(2),2) % replace 2 events with one
@@ -40,6 +46,10 @@ if any(indClose) % there is topList element within closest time interval allowed
 	[~,ind] = sort(topList(:,2),1,'descend');
 	topList = topList(ind,:);
 	
+disp('New toplist:');
+for j=1:topListLength,
+	disp([num2str(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
+end
 end
 
 
@@ -58,12 +68,6 @@ while doTopList
 		doTopList = false;
 	end
 end
-
-disp('New toplist:');
-for j=1:topListLength,
-	disp([num2str(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
-end
-disp(['added element: ' irf_time(newElement(1),'iso') ' ' num2str(newElement(2)) ' C' num2str(newElement(3))]);
 
 
 
