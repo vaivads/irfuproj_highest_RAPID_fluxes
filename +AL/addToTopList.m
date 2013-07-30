@@ -46,7 +46,7 @@ end
 doTopList = true;
 iTop     = 1;
 while doTopList
-	if newElement(2) > topList(iTop)
+	if newElement(2) > topList(iTop,2)
 		doTopList = false;
 		topList = [topList(1:iTop-1,:);...
 			newElement;...
