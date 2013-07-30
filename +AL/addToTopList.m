@@ -61,7 +61,7 @@ end
 
 for j=1:topListLength,
 	disp('New toplist:');
-	disp([numstr(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
+	disp([num2str(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
 end
 
 
