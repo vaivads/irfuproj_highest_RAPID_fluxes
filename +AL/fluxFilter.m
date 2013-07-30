@@ -43,100 +43,15 @@ while index <= electronIndexEnd
 	
 	
 	%Possible data point is found
-	if TEC(index,2) > topList(1,2)
+	if TEC(index,2) > topList(end,2)
 		
 		%Point is checked for validity
 		[validPoint,magneticIndexCurrent] = AL.validDataPoint(TEC(index-2:index+2,:),...
 			cluster,magneticTime,magneticIndexCurrent);
 		
-		% if valid we need to look ahead if there is a larger point
-		% within 8 minutes
+		% if valid add to the toplist
 		if validPoint
-			
-			
-			forward = true;
-			iCurrent = index;
-			
-			while forward
-				
-				%Look how many points lies within 8 minutes uptime
-				iNext = iCurrent;
-				while iNext <= electronIndexEnd && (TEC(iNext,1) - TEC(iCurrent,1)) < interval
-					iNext = iNext + 1;
-				end
-				iNext = iNext - 1;
-				
-				%Check if the current point is largest or if one uptime
-				%is larger
-				[localTopIndex, magneticIndexCurrent] = AL.FindLargestFlux(TEC(iCurrent-2:iNext+2,:), ...
-					cluster,magneticTime,magneticIndexCurrent);
-				
-				iTop = iCurrent - 1 + localTopIndex;
-				
-				%If current was largest stop moving forward, otherwise
-				%move on until no point is larger 8 minutes uptime
-				if iCurrent == iTop
-					forward = false;
-				else
-					iCurrent = iTop;
-				end
-				
-				
-			end
-			
-			
-			%When we have made sure that we stand on a datapoint with
-			%no one larger within 8 minutes uptime, we can add that
-			%point to the list. But at this point there may be smaller
-			%points that we passed that still are large enough to
-			%qualify for the toplist if we moved ahead more than 8
-			%minutes.
-			
-			iFinal = iNext;
-			magneticIndexFinal = magneticIndexCurrent;
-			backward = true;
-			
-			while backward
-				%look how many data points downtime lies within 8
-				%minutes.
-				iPre = iCurrent;
-				while iPre >= index && (TEC(iCurrent,1) - TEC(iPre,1)) < interval
-					iPre = iPre - 1;
-				end
-				iPre = iPre + 1;
-				
-				%Find largest point within 8 minutes
-				[localTopIndex, magneticIndexCurrent] = AL.FindLargestFlux(TEC(iPre-2:iCurrent+2,:), ...
-					cluster,magneticTime,magneticIndexCurrent);
-				
-				iTop =iPre - 1 + localTopIndex;
-				
-				%If it qualifies for toplist, add it to list.
-				if TEC(iTop,2) > topList(end,2)
-					topList = AL.addToTopList(TEC(iTop,:),topList);
-				end
-				
-				%Move current index 8 minutes downtime
-				iPre = iTop;
-				while iPre >= index && (TEC(iTop,1) - TEC(iPre,1)) < interval
-					iPre = iPre - 1;
-				end
-				iPre = iPre + 1;
-				
-				if iPre <= index
-					backward = false;
-				end
-				
-				iCurrent = iPre - 1;
-				
-			end
-			
-			%We have now returned back to index, the first point that
-			%was large enough to be added tot the list. But all point
-			%up to iFinal has been ckecked properly and we skip ahead.
-			index = iFinal;
-			magneticIndexCurrent = magneticIndexFinal;
-			
+			topList = AL.addToTopList(TEC(index,:),topList);			
 		end
 		
 	end

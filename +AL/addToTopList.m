@@ -17,13 +17,32 @@ function topList = addToTopList(newElement,topList)
 %OUTPUT: An updated version of the input topList. If the new element was
 %        added, the smallest element is dropped from the list.
 
-
+closestTimeInterval = 8*60; % two points cannot be closer than 8 min
 
 topListLength = size(topList,1);
 
+indClose = find(abs(topList(:,1)-newElement(1)) < closestTimeInterval);
+if indClose % there is topList element withiin closest time interval allowed
+	if numel(indClose) == 2, % new element inbetween two elements
+		if newElement(2) > topList(indClose(1),2) && ...
+				newElement(2) > topList(indClose(2),2) % replace 2 events with one
+			topList(indClose,:)=[]; % remove 2 events, will be replaced by new one
+		end
+	elseif numel(indClose) == 1,
+		if newElement(2) > topList(indClose,2) % if higher flux replace with the new one
+			topList(indClose,:)=[]; % remove old element, will be replaced by new one in the next loop
+		end
+	end
+	
+	% sort top list to move zeros to end
+	[~,ind] = sort(topList(:,2),1,'descend');
+	topList = topList(ind,:);
+	
+end
+
+
 doTopList = true;
 iTop     = 1;
-
 while doTopList
 	if newElement(2) > topList(iTop)
 		doTopList = false;
