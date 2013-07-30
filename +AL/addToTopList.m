@@ -59,11 +59,11 @@ while doTopList
 	end
 end
 
+disp('New toplist:');
 for j=1:topListLength,
-	disp('New toplist:');
 	disp([num2str(j) '. ' irf_time(topList(j,1),'iso') ' ' num2str(topList(j,2)) ' C' num2str(topList(j,3))]);
-	disp(['added element: ' irf_time(newElement(1),'iso') ' ' num2str(newElement(2)) ' C' num2str(newElement(3))]);
 end
+disp(['added element: ' irf_time(newElement(1),'iso') ' ' num2str(newElement(2)) ' C' num2str(newElement(3))]);
 
 
 
