@@ -31,9 +31,9 @@ while doTopList
 			newElement;...
 			topList(iTop:topListLength-1,:)];
 	else
-		pos=pos+1;
+		iTop=iTop+1;
 	end
-	if pos > topListLength
+	if iTop > topListLength
 		doTopList = false;
 	end
 end
