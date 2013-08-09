@@ -17,21 +17,11 @@ function timeList = RegionChecker(startTime,endTime,craft)
     
     %Loads position data for time interval
     tint = [startTime endTime];
-    R = local.c_read('R',tint,'mat');
+    R = local.c_read(['R' num2str(craft)],tint,'mat');
     
     if isempty(R) == 0
+	  TX=R;
     
-        %Pick out positions for a specific craft
-        if      craft == 1
-                    TX = R.R1;
-        elseif  craft == 2
-                    TX = R.R2;
-        elseif  craft == 3
-                    TX = R.R3;
-        else
-                    TX = R.R4;
-        end
-
         %Number of time point with position data. If more than one point is
         %available, we can check the intervals.
         length = size(TX,1);
