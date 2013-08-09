@@ -23,8 +23,8 @@ function [topList, magneticIndexCurrent] = fluxFilter(startTime,endTime, ...
 %interval under consideration has to be included in the data to be
 %analysed. Here those data points are removed from the topList and
 %added to the data.
-[topList,TEC] = AL.topListToData(startTime,endTime, ...
-	TEC,topList);
+
+[topList,TEC] = AL.topListToData(topList,TEC,startTime,endTime);
 
 interval = 480;
 iFinal = 0;
@@ -59,8 +59,3 @@ while index <= electronIndexEnd
 	index = index + 1;
 	
 end
-
-
-end
-
-
