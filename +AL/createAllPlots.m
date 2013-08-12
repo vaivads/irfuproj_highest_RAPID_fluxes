@@ -1,16 +1,16 @@
 function [ ] = createAllPlots(TopFluxes)
 
-%        [ ] = AL.createAllPlots(TopFluxes)
+%   AL.createAllPlots(TopFluxes)
 %
-%        Takes a TopFluxes cell structure, runs over all regions, all
-%        channels, and all ten events in each list, and then makes a plot of
-%        each. All plots are saved in a directory 'plots' that is created
-%        in the current folder.
+%   Takes a TopFluxes cell structure, runs over all regions, all
+%   channels, and all ten events in each list, and then makes a plot of
+%   each. All plots are saved in a directory 'plots' that is created
+%   in the current folder.
 %
 
 global GLOBAL__AL
 
-if ~exist('plots','dir'), mkdir('plots'); end
+if ~exist('./plots','dir'), mkdir('plots'); end
 
 for iRegion=1:numel(TopFluxes)
 	

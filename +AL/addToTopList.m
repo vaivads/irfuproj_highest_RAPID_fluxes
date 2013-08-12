@@ -1,5 +1,5 @@
 function newTopList = addToTopList(newElement,topList)
-%        topList = addToTopList(newElement,topList)
+%        topList = AL.addToTopList(newElement,topList)
 %
 %        Takes a sorted list of fixed length and a new element and checks
 %        if the element is larger than the samllest element on the list.

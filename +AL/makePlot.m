@@ -1,10 +1,10 @@
 function [] = makePlot(time,region,channel,craft,flux,listPosition,directory)
 
-%[] = makePlot(time,region,channel,craft,flux,listPosition,directory)
+% AL.makePlot(time,region,channel,craft,flux,listPosition,directory)
 %
-%Makes a plot with 10 minutes around 'time' using data from Cluster
-%number 'craft'. Plot is saved in 'directory'. 'region', 'channel',
-%'listPosition' are numbers that are included in the filename.
+% Makes a plot with 10 minutes around 'time' using data from Cluster
+% number 'craft'. Plot is saved in 'directory'. 'region', 'channel',
+% 'listPosition' are numbers that are included in the filename.
 
 
 
