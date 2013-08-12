@@ -1,4 +1,4 @@
-function topList = addToTopList(newElement,topList)
+function newTopList = addToTopList(newElement,topList)
 %        topList = addToTopList(newElement,topList)
 %
 %        Takes a sorted list of fixed length and a new element and checks
@@ -18,9 +18,10 @@ function topList = addToTopList(newElement,topList)
 %        added, the smallest element is dropped from the list.
 
 closestTimeInterval = 8*60; % two points cannot be closer than 8 min
-doTopList = true;           % insert new element into the top list
+doTopList           = true; % insert new element into the top list
 
 topListLength = size(topList,1);
+newTopList    = topList;
 
 % top list events within closestTimeInterval
 indClose = find(abs(topList(:,1)-newElement(1)) < closestTimeInterval);
@@ -30,23 +31,23 @@ if any(indClose)
 	if numel(indClose) == 2, % new element inbetween two elements
 		if newElement(2) > topList(indClose(1),2) && ...
 				newElement(2) > topList(indClose(2),2) % replace 2 events with one
-			topList(indClose,:)=[]; % remove 2 events, will be replaced by new one
-			topList(end:end+2,:)=0;
+			newTopList(indClose,:)  = []; % remove 2 events, will be replaced by new one
+			newTopList(end:end+2,:) = 0;
 		else
 			doTopList = false; % do not insert the new element as there is nearby better event
 		end
 	elseif numel(indClose) == 1,
 		if newElement(2) > topList(indClose,2) % if higher flux replace with the new one
-			topList(indClose,:)=[]; % remove old element, will be replaced by new one in the next loop
-			topList(end+1,:) = 0;
+			newTopList(indClose,:) = []; % remove old element, will be replaced by new one in the next loop
+			newTopList(end+1,:)    = 0;
 		else
 			doTopList = false; % do not insert the new element as there is nearby better event
 		end
 	end
 	
 	% sort top list to move zeros to end
-	[~,ind] = sort(topList(:,2),1,'descend');
-	topList = topList(ind,:);
+	[~,ind]    = sort(newTopList(:,2),1,'descend');
+	newTopList = newTopList(ind,:);
 	
 end
 
@@ -54,11 +55,11 @@ end
 % insert newElement into the toplist 
 iTop = 1;
 while doTopList
-	if newElement(2) > topList(iTop,2)
+	if newElement(2) > newTopList(iTop,2)
 		doTopList = false;
-		topList = [topList(1:iTop-1,:);...
+		newTopList = [newTopList(1:iTop-1,:);...
 			newElement;...
-			topList(iTop:topListLength-1,:)];
+			newTopList(iTop:topListLength-1,:)];
 	else
 		iTop=iTop+1;
 	end
@@ -66,6 +67,4 @@ while doTopList
 		doTopList = false;
 	end
 end
-
-
 

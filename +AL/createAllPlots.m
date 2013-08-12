@@ -1,6 +1,6 @@
 function [ ] = createAllPlots(TopFluxes)
 
-%        [ ] = createAllPlots(TopFluxes)
+%        [ ] = AL.createAllPlots(TopFluxes)
 %
 %        Takes a TopFluxes cell structure, runs over all regions, all
 %        channels, and all ten events in each list, and then makes a plot of
@@ -10,24 +10,24 @@ function [ ] = createAllPlots(TopFluxes)
 
 global GLOBAL__AL
 
-mkdir('plots');
+if ~exist('plots','dir'), mkdir('plots'); end
 
-for region=8:19
+for iRegion=1:numel(TopFluxes)
 	
 	for iChannel = 1:numel(GLOBAL__AL.iChannelsToRecord)
 		
 		channel = GLOBAL__AL.iChannelsToRecord(iChannel);
 		
-		iRegion = region-7;
-		
 		list = TopFluxes{iRegion,iChannel};
 		
 		for listPos=1:size(list,1)
 			
-			time  = list(listPos,1);			
-			craft = list(listPos,3);
+			time   = list(listPos,1);
+			flux   = list(listPos,2);
+			craft  = list(listPos,3);
+			region = iRegion + 7;
 			
-			AL.makePlot(time,region,channel,craft,listPos,'./plots');
+			AL.makePlot(time,region,channel,craft,flux,listPos,'./plots');
 			
 		end
 		
