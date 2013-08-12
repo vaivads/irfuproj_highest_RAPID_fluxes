@@ -1,5 +1,5 @@
 function  TopFluxes = fluxChecker(TopFluxes,cluster, TSTART, TEND)
-%       topFluxes = fluxChecker(topFluxes,cluster, TSTART, TEND)
+%       topFluxes = AL.fluxChecker(topFluxes,cluster, TSTART, TEND)
 %
 %       Updates the 'topFluxes' structure after going through the data
 %       from Cluster spacecraft number 'cluster' in the given time interval.

@@ -1,6 +1,6 @@
 function topList = removeFromTopList(topList,element)
 
-%topList = removeFromTopList(topList,element)
+%topList = AL.removeFromTopList(topList,element)
 %
 %Takes a topList containing rows of [time (electron flux) craft] and an element
 %vector of the same form and removes it from the list if that element is on
