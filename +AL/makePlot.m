@@ -12,48 +12,13 @@ function [] = makePlot(time,region,channel,craft,flux,listPosition,directory)
 tint= time + [-600 600];
 
 % create filename
-tV = irf_time(time,'epoch2vector');
+timeStr    = irf_time(time,'yyyymmddhhmmss');
+regionStr  = ['Reg' num2str(region)];
+channelStr = ['_Ch' num2str(channel)];
+listPosStr = ['_Top' num2str(listPosition,'%02d')];
+craftStr   = ['C' num2str(craft)];
 
-if tV(2) < 10
-	monthZero = '0';
-else
-	monthZero = '';
-end
-
-if tV(3) < 10
-	dayZero = '0';
-else
-	dayZero = '';
-end
-
-if tV(4) < 10
-	hourZero = '0';
-else
-	hourZero = '';
-end
-
-if tV(5) < 10
-	minZero = '0';
-else
-	minZero = '';
-end
-
-if tV(6) < 10
-	secZero = '0';
-else
-	secZero = '';
-end
-
-timeStr = ['Date' num2str(tV(1))  monthZero num2str(tV(2)) ...
-	dayZero num2str(tV(3)) 'Time' hourZero num2str(tV(4)) ...
-	minZero num2str(tV(5)) secZero num2str(floor(tV(6)))];
-
-regionStr = ['Reg' num2str(region)];
-channelStr = ['Ch' num2str(channel)];
-listPosStr = ['L' num2str(listPosition)];
-craftStr = ['C' num2str(craft)];
-
-filename = [regionStr channelStr listPosStr craftStr timeStr];
+filename = [regionStr channelStr listPosStr '_' craftStr '_' timeStr];
 
 
 % initialize figure
@@ -71,7 +36,7 @@ irf_plot(hca,gsmB);
 ylabel(hca,'B [nT] GSM');
 irf_legend(hca,{'B_X','B_Y','B_Z'},[0.98 0.05])
 title(hca,[craftStr ' ' irf_time(time,'yyyymmdd')])
-irf_legend(0,{['Top ' num2str(listPosition) ', flux= ' num2str(flux,'%7.2f')]},[0,1],'fontsize',10);
+irf_legend(0,{['Top ' num2str(listPosition) ', flux= ' num2str(flux,'%7.2f')]},[0,1],'fontsize',11);
 
 % new panel
 hca=irf_panel('CIS V');
@@ -167,8 +132,7 @@ irf_legend(h(1),filename,[1.0 1.001],'fontsize',8,'color',[0.5 0.5 0.5]);
 
 
 % add line marks
-tmarks=time;
-irf_pl_mark(h,tmarks,'black','LineWidth',0.1);
+irf_pl_mark(h,time,'black','LineWidth',0.1);
 
 
 % save plot to file
