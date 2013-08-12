@@ -71,7 +71,7 @@ irf_plot(hca,gsmB);
 ylabel(hca,'B [nT] GSM');
 irf_legend(hca,{'B_X','B_Y','B_Z'},[0.98 0.05])
 title(hca,[craftStr ' ' irf_time(time,'yyyymmdd')])
-irf_legend(0,{['Top ' num2str(listPosition) ', flux= ' num2str(flux,'%7.2f')]},[0,1],'fontsize',8);
+irf_legend(0,{['Top ' num2str(listPosition) ', flux= ' num2str(flux,'%7.2f')]},[0,1],'fontsize',10);
 
 % new panel
 hca=irf_panel('CIS V');
