@@ -127,6 +127,7 @@ end
 				% SPP outside matrix interval, do nothing.
 			else
 				% remove SPP points
+				irf_log('dsrc','Removing SPP events');
 				[~,ind] = irf_tlim(matrix(:,1),tint);
 				matrix(ind,:) = [];
 			end
@@ -139,7 +140,7 @@ end
 		if isempty(matrix), return; end
 		
 		tintArray = [...
-			irf_time('2001-11-06T01:59:00Z/22001-11-06T07:00:00Z','iso2tint');...
+			irf_time('2001-11-06T01:59:00Z/2001-11-06T07:00:00Z','iso2tint');...
 			];
 		
 		for it = 1:size(tintArray,1)
@@ -148,6 +149,7 @@ end
 				% tint outside matrix interval, do nothing.
 			else
 				% remove bad points
+				irf_log('dsrc','Removing bad RAPID events');
 				[~,ind] = irf_tlim(matrix(:,1),tint);
 				matrix(ind,:) = [];
 			end
