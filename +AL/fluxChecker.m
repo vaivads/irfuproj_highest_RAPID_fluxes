@@ -39,6 +39,8 @@ for iOrbit=1:nOrbits
 	%Load electron flux and magnetic field data
 	tint = [orbitStartTime orbitEndTime];
 	Ematrix = local.c_read(electronVariable,tint,'mat');
+	Ematrix = clean_spp_times(Ematrix);
+	Ematrix = clean_other_times(Ematrix);
 	Bmatrix = local.c_read(magneticVariable,tint,'mat');
 	
 	%No point to look if there's no data for one or both available
@@ -108,3 +110,51 @@ for iOrbit=1:nOrbits
 	end
 	
 end
+
+	function matrix = clean_spp_times(matrix)
+		% remove times that are within SPP events that are known to saturate RAPID
+		% instrument
+		
+		if isempty(matrix), return; end
+
+		tintArray = [...
+			irf_time('2001-09-24T12:00:00Z/2001-09-29T03:20:00Z','iso2tint');...
+			];
+		
+		for it = 1:size(tintArray,1)
+			tint=tintArray(it,:);
+			if matrix(end,1) < tint(1) || matrix(1,1) > tint(2),
+				% SPP outside matrix interval, do nothing.
+			else
+				% remove SPP points
+				irf_log('dsrc','Removing SPP events');
+				[~,ind] = irf_tlim(matrix(:,1),tint);
+				matrix(ind,:) = [];
+			end
+		end
+	end
+	function matrix = clean_other_times(matrix)
+		% remove times that are within SPP events that are known to saturate RAPID
+		% instrument
+
+		if isempty(matrix), return; end
+		
+		tintArray = [...
+			irf_time('2001-11-06T01:59:00Z/2001-11-06T07:00:00Z','iso2tint');...
+			];
+		
+		for it = 1:size(tintArray,1)
+			tint=tintArray(it,:);
+			if matrix(end,1) < tint(1) || matrix(1,1) > tint(2),
+				% tint outside matrix interval, do nothing.
+			else
+				% remove bad points
+				irf_log('dsrc','Removing bad RAPID events');
+				[~,ind] = irf_tlim(matrix(:,1),tint);
+				matrix(ind,:) = [];
+			end
+		end
+	end
+
+end
+
