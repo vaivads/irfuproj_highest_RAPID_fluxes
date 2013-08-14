@@ -41,7 +41,7 @@ XRe((XRe(:,3) < -20),3) = NaN;
 indBoundaries = find((XRe(2:end,3)~=XRe(1:end-1,3)))+1;
 indRegionStart = [1 ;indBoundaries];
 indRegionStart( isnan(XRe(indRegionStart,3)) ) = [];
-indRegionEnd   = [indBoundaries; size(XRe,1)];
+indRegionEnd   = [indBoundaries-1; size(XRe,1)];
 indRegionEnd( isnan(XRe(indRegionEnd,3)) ) = [];
 timeList = [R(indRegionStart,1) R(indRegionEnd,1) XRe(indRegionStart,3)];
 
