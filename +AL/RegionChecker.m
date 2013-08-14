@@ -8,6 +8,10 @@ function timeList = RegionChecker(startTime,endTime,craft)
 %corresponding to that region. Relevant region are -8 > x > -9, -9 > x > -10 etc.
 %until -19 > x > -20, where x is the spacecraft location in GSE coordinates,
 %given in Earth radii.
+% 
+% OUTPUT: 
+%  timeList: row matrix with elements [tstart tend region]
+%
 
 %Earth radii (km)
 Re = 6371;
@@ -34,9 +38,12 @@ XRe = [XRe floor(XRe(:,2))]; % add column with region identifier
 
 XRe((XRe(:,3) > -9),3)  = NaN; % put to NaN points that are not classified regions
 XRe((XRe(:,3) < -20),3) = NaN;
-indRegionStart = isnumber( XRe( [1 ~isequal(XRe(2:end,3),XRe(1:end-1,3))] ) ); 
-indRegionEnd   = isnumber( XRe( [~isequal(XRe(2:end,3),XRe(1:end-1,3)) size(XRe,1)] ) ); 
-timeList = [R(indRegionStart,1) R(indRegionEnd,1)];
+indBoundaries = find((XRe(2:end,3)~=XRe(1:end-1,3)))+1;
+indRegionStart = [1 ;indBoundaries];
+indRegionStart( isnan(XRe(indRegionStart,3)) ) = [];
+indRegionEnd   = [indBoundaries; size(XRe,1)];
+indRegionEnd( isnan(XRe(indRegionEnd,3)) ) = [];
+timeList = [R(indRegionStart,1) R(indRegionEnd,1) XRe(indRegionStart,3)];
 
 indRegionInterp = (indRegionStart(2:end) - indRegionEnd(1:end-1)) == 1; % find times that should be interpolated
 
