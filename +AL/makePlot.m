@@ -53,7 +53,20 @@ gsmV=irf_gse2gsm(V);
 % plot
 irf_plot(hca,gsmV)
 ylabel(hca,varLabel);
-irf_zoom(hca,'y',[-300 500])
+ylimMin = -300; ylimMax = 500; % default values
+if ~isempty(V),
+	if numel(find(V(:,2)>1300)) > 4,
+		ylimMax = 2000;
+	elseif numel(find(V(:,2)>500)) > 4,
+		ylimMax = 1000;
+	end
+	if numel(find(V(:,2)<-700)) > 4,
+		ylimMin = -1000;
+	elseif numel(find(V(:,2)<-400)) > 4,
+		ylimMin = -600;
+	end
+end
+irf_zoom(hca,'y',[ylimMin ylimMax])
 irf_legend(hca,{'V_X','V_Y','V_Z'},[0.2 0.95])
 
 
